@@ -208,6 +208,44 @@ void editBusiness(Note notes[])
 	notes[id].addNote();
 }
 
+void printLine(Note note, int id)
+{
+	cout.width(4);
+	cout << id << " \t| ";
+	cout << note.name;
+	if (note.name.size() < 8)
+		cout << "\t";
+	cout << "\t| " << note.prioritet << "\t|  ";
+	note.dataExecution.print();
+	cout << "\t| ";
+	cout << note.description << "\n";
+}
+
+void printBusiness(Note notes[])
+{
+	int sub = 0;
+
+	sortByPriority(notes, lastNoteID);
+
+	for (;;)
+	{
+		system("cls");
+		cout << string(105, '-') << "\n";
+		cout.width(4);
+		cout << "   No\t| " << "Name\t\t| " << "Prior.|  " << "Date & Time Exec.\t| " << "Description" << endl;
+		cout << string(105, '-') << "\n";
+		for (int i = 0; i < lastNoteID; i++)
+			printLine(notes[i], i);
+
+		cout << "0. Back\n>> ";
+		sub = inputNum();
+		if (sub == 0)
+			break;
+		else
+			continue;
+	}
+}
+
 void searchBusiness(Note notes[])
 {
 	system("cls");
@@ -323,31 +361,6 @@ void searchBusiness(Note notes[])
 				}
 			}
 		}
-		else
-			continue;
-	}
-}
-
-void printBusiness(Note notes[])
-{
-	int sub = 0;
-
-	sortByPriority(notes, lastNoteID);
-
-	for (;;)
-	{
-		system("cls");
-		cout << "No. | Name \t| Prior. \t| Description | Data & Time Exec.\n";
-		for (int i = 0; i < lastNoteID; i++)
-		{
-			cout << i + 1;
-			notes[i].print();
-		}
-
-		cout << "0. Back\n>> ";
-		sub = inputNum();
-		if (sub == 0)
-			break;
 		else
 			continue;
 	}
