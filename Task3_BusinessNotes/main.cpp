@@ -74,33 +74,25 @@ struct Note
 	{
 		system("cls");
 		cout << "Enter name: ";
-		getline(cin, name);
+		name = inputString();
 
 		cout << "Enter note\'s prioritet:";
-		//cout << "(bigger - higher): ";
-		string input;
-		getline(cin, input);
-		prioritet = stoi(input);
+		prioritet = inputNum();
 
 		cout << "Enter description: ";
-		getline(cin, description);
+		description = inputString();
 
 		cout << "Enter data&time execution:\n";
 		cout << "\tDay    : ";
-		getline(cin, input);
-		dataExecution.day = stoi(input);
+		dataExecution.day = inputNum();
 		cout << "\tMounth : ";
-		getline(cin, input);
-		dataExecution.mounth = stoi(input);
+		dataExecution.mounth = inputNum();
 		cout << "\tYear   : ";
-		getline(cin, input);
-		dataExecution.year = stoi(input);
+		dataExecution.year = inputNum();
 		cout << "\tHour   : ";
-		getline(cin, input);
-		dataExecution.hour = stoi(input);
+		dataExecution.hour = inputNum();
 		cout << "\tMinutes: ";
-		getline(cin, input);
-		dataExecution.minutes = stoi(input);
+		dataExecution.minutes = inputNum();
 	}
 
 	void removeNote()
@@ -123,6 +115,7 @@ struct Note
 
 void addBusiness(Note notes[])
 {
+	system("cls");
 	if (lastNoteID + 1 < 100)
 	{
 		notes[lastNoteID].addNote();
@@ -134,13 +127,12 @@ void addBusiness(Note notes[])
 
 void removeBusiness(Note notes[])
 {
+	system("cls");
 	int id = 0;
 	for (;;)
 	{
-		string input;
 		cout << "Enter business No: ";
-		getline(cin, input);
-		id = stoi(input) - 1;
+		id = inputNum();
 		if (id >= 0 && id <= lastNoteID)
 			break;
 		else
@@ -150,6 +142,7 @@ void removeBusiness(Note notes[])
 		}
 	}
 
+	system("cls");
 	for (int i = id; i < lastNoteID; i++)
 	{
 		notes[i] = notes[i + 1];
@@ -160,13 +153,13 @@ void removeBusiness(Note notes[])
 
 void editBusiness(Note notes[])
 {
+	system("cls");
 	int id = 0;
+
 	for (;;)
 	{
-		string input;
 		cout << "Enter business No: ";
-		getline(cin, input);
-		id = stoi(input) - 1;
+		id = inputNum();
 		if (id >= 0 && id <= lastNoteID)
 			break;
 		else
@@ -181,22 +174,12 @@ void editBusiness(Note notes[])
 	notes[id].addNote();
 }
 
-template <typename T>
-void searching(T key, Note notes[])
-{
-	system("cls");
-	for (int i = 0; i < lastNoteID; i++)
-	{
-
-	}
-}
-
 void searchBusiness(Note notes[])
 {
+	system("cls");
 	int subMenu = 0;
 	for (;;)
 	{
-		system("cls");
 		cout << "Search business note by:\n 1. name\n 2. priority\n 3. description\n 4. date & time execution\n0. Back\n>> ";
 		subMenu = inputNum();
 
@@ -204,6 +187,7 @@ void searchBusiness(Note notes[])
 			break;
 		else if (subMenu == 1)
 		{
+			system("cls");
 			cout << "Enter searching name: ";
 			string key = inputString();
 
@@ -216,6 +200,7 @@ void searchBusiness(Note notes[])
 		}
 		else if (subMenu == 2)
 		{
+			system("cls");
 			cout << "Enter business priority: ";
 			int key = inputNum();
 
@@ -228,6 +213,7 @@ void searchBusiness(Note notes[])
 		}
 		else if (subMenu == 3)
 		{
+			system("cls");
 			cout << "Enter key word: ";
 			string key = inputString();
 
@@ -282,7 +268,10 @@ void searchBusiness(Note notes[])
 					}
 				}
 				else
+				{
+					system("cls");
 					continue;
+				}
 			}
 		}
 		else
@@ -301,31 +290,30 @@ void printBusiness(Note notes[])
 int main()
 {
 	Note notes[SIZE]{};
-	string menu = "";
+	int menuNum = 0;
 
 	for (;;)
 	{
+		system("cls");
 		cout << "1. Add business\n2. Remove business\n3. Edit business\n";
 		cout << "4. Search business\n5. Print business list\n0. Exit\n>> ";
-		getline(cin, menu);
+		menuNum = inputNum();
 
-		if (menu == "0")
+		void (*menu[5])(Note notes[])
+		{ 
+			addBusiness,
+			removeBusiness,
+			editBusiness,
+			searchBusiness,
+			printBusiness
+		};
+
+		if (menuNum == 0)
 			break;
-		else if (menu == "1")
-			addBusiness(notes);
-		else if (menu == "2")
-			removeBusiness(notes);
-		else if (menu == "3")
-			editBusiness(notes);
-		else if (menu == "4")
-			searchBusiness(notes);
-		else if (menu == "5")
-			printBusiness(notes);
+		else if (menuNum >= 1 && menuNum <= 5)
+			menu[menuNum - 1](notes);
 		else
-		{
-			cout << "Unknown command\n";
 			continue;
-		}
 	}
 
 	return 0;

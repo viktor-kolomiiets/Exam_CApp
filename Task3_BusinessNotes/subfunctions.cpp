@@ -7,6 +7,7 @@ string inputString()
 {
 	string input;
 	getline(cin, input);
+	return input;
 }
 
 int inputNum()
