@@ -23,6 +23,7 @@
 #include <string>
 #include <stdlib.h>
 #include <time.h>
+#include "subfunctions.h"
 using namespace std;
 
 const int SIZE = 100;
@@ -180,15 +181,112 @@ void editBusiness(Note notes[])
 	notes[id].addNote();
 }
 
+template <typename T>
+void searching(T key, Note notes[])
+{
+	system("cls");
+	for (int i = 0; i < lastNoteID; i++)
+	{
+
+	}
+}
+
 void searchBusiness(Note notes[])
 {
 	int subMenu = 0;
 	for (;;)
 	{
-		string input;
-		cout << "";
-		getline(cin, input);
-		subMenu = stoi(input);
+		system("cls");
+		cout << "Search business note by:\n 1. name\n 2. priority\n 3. description\n 4. date & time execution\n0. Back\n>> ";
+		subMenu = inputNum();
+
+		if (subMenu == 0)
+			break;
+		else if (subMenu == 1)
+		{
+			cout << "Enter searching name: ";
+			string key = inputString();
+
+			system("cls");
+			for (int i = 0; i < lastNoteID; i++)
+			{
+				if (notes[i].name == key)
+					notes[i].print();
+			}
+		}
+		else if (subMenu == 2)
+		{
+			cout << "Enter business priority: ";
+			int key = inputNum();
+
+			system("cls");
+			for (int i = 0; i < lastNoteID; i++)
+			{
+				if (notes[i].prioritet == key)
+					notes[i].print();
+			}
+		}
+		else if (subMenu == 3)
+		{
+			cout << "Enter key word: ";
+			string key = inputString();
+
+			system("cls");
+			for (int i = 0; i < lastNoteID; i++)
+			{
+				if (notes[i].description.find(key) != string::npos)
+					notes[i].print();
+			}
+		}
+		else if (subMenu == 4)
+		{
+			int sub = 0;
+			for (;;)
+			{
+				system("cls");
+				cout << "Search by:\n 1. date\n 2. time\n0. Back\n>> ";
+				sub = inputNum();
+
+				if (sub == 0)
+					break;
+				else if (sub == 1)
+				{
+					system("cls");
+					cout << "Enter day: ";
+					int keyD = inputNum();
+					cout << "Enter mounth: ";
+					int keyM = inputNum();
+					cout << "Enter year: ";
+					int keyY = inputNum();
+
+					system("cls");
+					for (int i = 0; i < lastNoteID; i++)
+					{
+						if (notes[i].dataExecution.day == keyD && notes[i].dataExecution.mounth == keyM && notes[i].dataExecution.year == keyY)
+							notes[i].print();
+					}
+				}
+				else if (sub == 2)
+				{
+					system("cls");
+					cout << "Enter hour: ";
+					int keyH = inputNum();
+					cout << "Enter minutes: ";
+					int keyMn = inputNum();
+
+					system("cls");
+					for (int i = 0; i < lastNoteID; i++)
+					{
+						if (notes[i].dataExecution.hour == keyH && notes[i].dataExecution.minutes == keyMn)
+							notes[i].print();
+					}
+				}
+				else
+					continue;
+			}
+		}
+		else
+			continue;
 	}
 }
 
