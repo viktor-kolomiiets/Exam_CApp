@@ -180,9 +180,16 @@ void editBusiness(Note notes[])
 	notes[id].addNote();
 }
 
-void searchBusiness()
+void searchBusiness(Note notes[])
 {
-
+	int subMenu = 0;
+	for (;;)
+	{
+		string input;
+		cout << "";
+		getline(cin, input);
+		subMenu = stoi(input);
+	}
 }
 
 void printBusiness(Note notes[])
@@ -213,7 +220,7 @@ int main()
 		else if (menu == "3")
 			editBusiness(notes);
 		else if (menu == "4")
-			searchBusiness();
+			searchBusiness(notes);
 		else if (menu == "5")
 			printBusiness(notes);
 		else
