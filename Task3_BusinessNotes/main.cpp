@@ -157,9 +157,27 @@ void removeBusiness(Note notes[])
 	::lastNoteID--;
 }
 
-void editBusiness()
+void editBusiness(Note notes[])
 {
+	int id = 0;
+	for (;;)
+	{
+		string input;
+		cout << "Enter business No: ";
+		getline(cin, input);
+		id = stoi(input) - 1;
+		if (id >= 0 && id <= lastNoteID)
+			break;
+		else
+		{
+			cout << "Out of range\n";
+			continue;
+		}
+	}
 
+	system("cls");
+	cout << "Enter new data:\n";
+	notes[id].addNote();
 }
 
 void searchBusiness()
@@ -193,7 +211,7 @@ int main()
 		else if (menu == "2")
 			removeBusiness(notes);
 		else if (menu == "3")
-			editBusiness();
+			editBusiness(notes);
 		else if (menu == "4")
 			searchBusiness();
 		else if (menu == "5")
