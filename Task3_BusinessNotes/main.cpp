@@ -67,12 +67,6 @@ struct Date
 		return _value;
 	}
 
-	//convert time to union value
-	int timeToValue()
-	{
-		return hour * 100 + minutes;
-	}
-
 	void removeDate()
 	{
 		minutes = 0;
@@ -119,14 +113,27 @@ struct Note
 		description = "";
 		dateExec.removeDate();
 	}
-
-	void print()
-	{
-		cout << priority << "\t| " << name << "\t| ";
-		dateExec.print();
-		cout << "\t| " << description << "\n";
-	}
 };
+
+bool compareDates(Date date1, Date date2)
+{
+	if (date1.year == date2.year)
+		if (date1.month == date2.month)
+			if (date1.day == date2.day)
+				if (date1.hour == date2.hour)
+					if (date1.minutes == date2.minutes)
+						return true;
+					else
+						return false;
+				else
+					return false;
+			else
+				return false;
+		else
+			return false;
+	else
+		return false;
+}
 
 void setMinNotePrior(Note notes[], int start, int end)
 {
@@ -378,7 +385,6 @@ void showBisinesses(Note notes[])
 					for (int i = 0; i < lastNoteID; i++)
 						if (notes[i].dateExec.year == year && notes[i].dateExec.getWeek() == week)
 						{
-							//cout << notes[i].dateExec.getWeek() << "\n";
 							output[j] = notes[i];
 							j++;
 						}
@@ -476,7 +482,7 @@ void searchBusiness(Note notes[])
 	int subMenu = 0;
 	for (;;)
 	{
-		cout << "Search business note by:\n1. Name\n2. Priority\n3. Description\n4. Date & Time execution\n0. Back\n>> ";
+		cout << "Search to-do note by:\n1. Name\n2. Priority\n3. Description\n4. Date & Time execution\n0. Back\n>> ";
 		subMenu = inputNum();
 
 		if (subMenu == 0)
@@ -488,12 +494,28 @@ void searchBusiness(Note notes[])
 			string key = inputString();
 
 			system("cls");
+			Note* output;
+			int outputSize = 0;
 			for (int i = 0; i < lastNoteID; i++)
-			{
 				if (notes[i].name == key)
+					outputSize++;
+			if (outputSize > 0)
+			{
+				int j = 0, sub = 0;
+				output = new Note[outputSize];
+				for (int i = 0; i < lastNoteID; i++)
+					if (notes[i].name == key)
+					{
+						output[j] = notes[i];
+						j++;
+					}
+				printTable(output, outputSize);
+				for (;;)
 				{
-					cout << i + 1 << " | ";
-					notes[i].print();
+					cout << "0. Back\n>> ";
+					sub = inputNum() + 1;
+					if (sub)
+						break;
 				}
 			}
 		}
@@ -504,12 +526,28 @@ void searchBusiness(Note notes[])
 			int key = inputNum();
 
 			system("cls");
+			Note* output;
+			int outputSize = 0;
 			for (int i = 0; i < lastNoteID; i++)
-			{
 				if (notes[i].priority == key)
+					outputSize++;
+			if (outputSize > 0)
+			{
+				int j = 0, sub = 0;
+				output = new Note[outputSize];
+				for (int i = 0; i < lastNoteID; i++)
+					if (notes[i].priority == key)
+					{
+						output[j] = notes[i];
+						j++;
+					}
+				printTable(output, outputSize);
+				for (;;)
 				{
-					cout << i + 1 << " | ";
-					notes[i].print();
+					cout << "0. Back\n>> ";
+					sub = inputNum() + 1;
+					if (sub)
+						break;
 				}
 			}
 		}
@@ -520,12 +558,28 @@ void searchBusiness(Note notes[])
 			string key = inputString();
 
 			system("cls");
+			Note* output;
+			int outputSize = 0;
 			for (int i = 0; i < lastNoteID; i++)
-			{
 				if (notes[i].description.find(key) != string::npos)
+					outputSize++;
+			if (outputSize > 0)
+			{
+				int j = 0, sub = 0;
+				output = new Note[outputSize];
+				for (int i = 0; i < lastNoteID; i++)
+					if (notes[i].description.find(key) != string::npos)
+					{
+						output[j] = notes[i];
+						j++;
+					}
+				printTable(output, outputSize);
+				for (;;)
 				{
-					cout << i + 1 << " | ";
-					notes[i].print();
+					cout << "0. Back\n>> ";
+					sub = inputNum() + 1;
+					if (sub)
+						break;
 				}
 			}
 		}
@@ -535,53 +589,35 @@ void searchBusiness(Note notes[])
 			for (;;)
 			{
 				system("cls");
-				cout << "Search by:\n1. Date\n2. Time\n0. Back\n>> ";
-				sub = inputNum();
+				Date date;
+				cout << "Enter date & time:\n";
+				date.setDate();
+				date.setTime();
 
-				if (sub == 0)
-					break;
-				else if (sub == 1)
+				system("cls");
+				Note* output;
+				int outputSize = 0;
+				for (int i = 0; i < lastNoteID; i++)
+					if (compareDates(notes[i].dateExec, date))
+						outputSize++;
+				if (outputSize > 0)
 				{
-					system("cls");
-					cout << "Enter day   : ";
-					int keyD = inputNum();
-					cout << "Enter month : ";
-					int keyM = inputNum();
-					cout << "Enter year  : ";
-					int keyY = inputNum();
-
-					system("cls");
+					int j = 0, sub = 0;
+					output = new Note[outputSize];
 					for (int i = 0; i < lastNoteID; i++)
-					{
-						if (notes[i].dateExec.day == keyD && notes[i].dateExec.month == keyM && notes[i].dateExec.year == keyY)
+						if (compareDates(notes[i].dateExec, date))
 						{
-							cout << i + 1 << " | ";
-							notes[i].print();
+							output[j] = notes[i];
+							j++;
 						}
-					}
-				}
-				else if (sub == 2)
-				{
-					system("cls");
-					cout << "Enter hour   : ";
-					int keyH = inputNum();
-					cout << "Enter minutes: ";
-					int keyMn = inputNum();
-
-					system("cls");
-					for (int i = 0; i < lastNoteID; i++)
+					printTable(output, outputSize);
+					for (;;)
 					{
-						if (notes[i].dateExec.hour == keyH && notes[i].dateExec.minutes == keyMn)
-						{
-							cout << i + 1 << " | ";
-							notes[i].print();
-						}
+						cout << "0. Back\n>> ";
+						sub = inputNum() + 1;
+						if (sub)
+							break;
 					}
-				}
-				else
-				{
-					system("cls");
-					continue;
 				}
 			}
 		}
