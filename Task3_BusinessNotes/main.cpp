@@ -34,15 +34,35 @@ struct Date
 	int minutes = 0;
 	int hour = 0;
 	int day = 0;
-	int mounth = 0;
+	int month = 0;
 	int year = 0;
 
-	long toNumber()
+	void setDate()
 	{
-		long _value = year * 100000000 + mounth * 1000000 + day * 10000 + hour * 100 + minutes;
+		cout << "\t\tDay      : ";
+		day = inputNum();
+		cout << "\t\tMonth    : ";
+		month = inputNum();
+		cout << "\t\tYear     : ";
+		year = inputNum();
+	}
+
+	void setTime()
+	{
+		cout << "\t\tHour     : ";
+		hour = inputNum();
+		cout << "\t\tMinutes  : ";
+		minutes = inputNum();
+	}
+
+	//convert date & time to union value
+	long toValue()
+	{
+		long _value = year * 100000000 + month * 1000000 + day * 10000 + hour * 100 + minutes;
 		return _value;
 	}
 
+	//convert time to union value
 	int timeToValue()
 	{
 		return hour * 100 + minutes;
@@ -53,22 +73,22 @@ struct Date
 		minutes = 0;
 		hour = 0;
 		day = 0;
-		mounth = 0;
+		month = 0;
 		year = 0;
 	}
 
 	void print()
 	{
-		printf("%d.%d.%d, %d:%d", day, mounth, year, hour, minutes);
+		printf("%d.%d.%d, %d:%d", day, month, year, hour, minutes);
 	}
 };
 
 struct Note
 {
 	string name = "";
-	int prioritet = 0;
+	int priority = 0;
 	string description = "";
-	Date dataExecution;
+	Date dateExec;
 
 	void addNote()
 	{
@@ -77,48 +97,39 @@ struct Note
 		name = inputString();
 
 		cout << "Enter note\'s priority    : ";
-		prioritet = inputNum();
+		priority = inputNum();
 
 		cout << "Enter description        : ";
 		description = inputString();
 
 		cout << "Enter data&time execution:\n";
-		cout << "\t\tDay      : ";
-		dataExecution.day = inputNum();
-		cout << "\t\tMounth   : ";
-		dataExecution.mounth = inputNum();
-		cout << "\t\tYear     : ";
-		dataExecution.year = inputNum();
-		cout << "\t\tHour     : ";
-		dataExecution.hour = inputNum();
-		cout << "\t\tMinutes  : ";
-		dataExecution.minutes = inputNum();
+		dateExec.setDate();
+		dateExec.setTime();
 	}
 
 	void removeNote()
 	{
 		name = "";
-		prioritet = 0;
+		priority = 0;
 		description = "";
-		dataExecution.removeDate();
+		dateExec.removeDate();
 	}
 
 	void print()
 	{
-		cout << prioritet << "\t| " << name << "\t| ";
-		dataExecution.print();
+		cout << priority << "\t| " << name << "\t| ";
+		dateExec.print();
 		cout << "\t| " << description << "\n";
 	}
 };
 
 void setMinNotePrior(Note notes[], int start, int end)
 {
-	//start element of array is min
 	Note min = notes[start];
 
 	for (int i = 1; i <= end; i++)
 	{
-		if (notes[i].prioritet < min.prioritet)
+		if (notes[i].priority < min.priority)
 			min = notes[i];
 	}
 
@@ -136,12 +147,47 @@ void sortByPriority(Note notes[], long size)
 
 	for (i = 1; i < size; i++) {
 		note = notes[i];
-		for (j = i - 1; notes[j].prioritet > note.prioritet; j--)
+		for (j = i - 1; notes[j].priority > note.priority; j--)
 			notes[j + 1] = notes[j];
 		notes[j + 1] = note;
 	}
 
-	for (j = 1; j < size && notes[j].prioritet < oldFirstNote.prioritet; j++)
+	for (j = 1; j < size && notes[j].priority < oldFirstNote.priority; j++)
+		notes[j - 1] = notes[j];
+
+	notes[j - 1] = oldFirstNote;
+}
+
+void setMinNoteDate(Note notes[], int start, int end)
+{
+	Note min = notes[start];
+
+	for (int i = 1; i <= end; i++)
+	{
+		if (notes[i].dateExec.toValue() < min.dateExec.toValue())
+			min = notes[i];
+	}
+
+	notes[start] = min;
+}
+
+void sortByDate(Note notes[], long size)
+{
+	Note note;
+	long i, j;
+
+	Note oldFirstNote = notes[0];
+
+	setMinNotePrior(notes, 0, size - 1);
+
+	for (i = 1; i < size; i++) {
+		note = notes[i];
+		for (j = i - 1; notes[j].dateExec.toValue() > note.dateExec.toValue(); j--)
+			notes[j + 1] = notes[j];
+		notes[j + 1] = note;
+	}
+
+	for (j = 1; j < size && notes[j].dateExec.toValue() < oldFirstNote.dateExec.toValue(); j++)
 		notes[j - 1] = notes[j];
 
 	notes[j - 1] = oldFirstNote;
@@ -215,17 +261,15 @@ void printLine(Note note, int id)
 	cout << note.name;
 	if (note.name.size() < 8)
 		cout << "\t";
-	cout << "\t| " << note.prioritet << "\t|  ";
-	note.dataExecution.print();
+	cout << "\t| " << note.priority << "\t|  ";
+	note.dateExec.print();
 	cout << "\t| ";
 	cout << note.description << "\n";
 }
 
-void printBusiness(Note notes[])
+void printTable(Note notes[], int size)
 {
 	int sub = 0;
-
-	sortByPriority(notes, lastNoteID);
 
 	for (;;)
 	{
@@ -234,13 +278,149 @@ void printBusiness(Note notes[])
 		cout.width(4);
 		cout << "   No\t| " << "Name\t\t| " << "Prior.|  " << "Date & Time Exec.\t| " << "Description" << endl;
 		cout << string(105, '-') << "\n";
-		for (int i = 0; i < lastNoteID; i++)
+
+		for (int i = 0; i < size; i++)
 			printLine(notes[i], i);
 
 		cout << "0. Back\n>> ";
+
 		sub = inputNum();
 		if (sub == 0)
 			break;
+		else
+			continue;
+	}
+}
+
+void showBisinesses(Note notes[])
+{
+	int subMenu = 0;
+	for (;;)
+	{
+		system("cls");
+		cout << "Display to-do list for:\n";
+		cout << "1. Day\n2. Week\n3. Month\n0. Back\n>> ";
+		subMenu = inputNum();
+
+		if (subMenu == 0)
+			break;
+		else if (subMenu == 1)
+		{
+			Date date;
+			int sub = 0;
+			
+			system("cls");
+			for (;;)
+			{
+				int id = -1;
+				int outputSize = 0;
+				Note* output;
+				
+				cout << "Enter day date:\n";
+				date.setDate();
+
+				for (int i = 0; i < lastNoteID; i++)
+					if (notes[i].dateExec.day == date.day && notes[i].dateExec.month == date.month && notes[i].dateExec.year == date.month)
+						outputSize++;
+
+				if (id == -1)
+				{
+					cout << "There is no entry for this day\n";
+					//continue;
+				}
+				else
+				{
+					output = new Note[outputSize];
+					int j = 0;
+					for (int i = 0; i < lastNoteID; i++)
+						if (notes[i].dateExec.day == date.day && notes[i].dateExec.month == date.month && notes[i].dateExec.year == date.month)
+						{
+							output[j] = notes[i];
+							j++;
+						}
+					int sort = sortType();
+					if (sort == 1)
+						sortByPriority(output, outputSize);
+					else
+						sortByDate(output, outputSize);
+
+					printTable(output, outputSize);
+
+					if (output)
+					{
+						delete[] output;
+						output = nullptr;
+					}
+				}
+
+				cout << "0. Back\n>> ";
+				sub = inputNum();
+				if (sub == 0)
+					break;
+				else
+					continue;
+			}
+		}
+		else if (subMenu == 2)
+		{
+
+		}
+		else if (subMenu == 3)
+		{
+			int sub = 0, month = 0;;
+
+			system("cls");
+			for (;;)
+			{
+				int id = -1;
+				int outputSize = 0;
+				Note* output;
+
+				cout << "Enter month:\n";
+				month = inputNum();
+
+				for (int i = 0; i < lastNoteID; i++)
+					if (notes[i].dateExec.month == month)
+						outputSize++;
+
+				if (id == -1)
+				{
+					cout << "There is no entry for this month\n";
+					//continue;
+				}
+				else
+				{
+					output = new Note[outputSize];
+					int j = 0;
+					for (int i = 0; i < lastNoteID; i++)
+						if (notes[i].dateExec.month == month)
+						{
+							output[j] = notes[i];
+							j++;
+						}
+					int sort = sortType();
+					if (sort == 1)
+						sortByPriority(output, outputSize);
+					else
+						sortByDate(output, outputSize);
+
+					printTable(output, outputSize);
+
+					if (output)
+					{
+						delete[] output;
+						output = nullptr;
+					}
+				}
+
+				cout << "0. Back\n>> ";
+				sub = inputNum();
+				if (sub == 0)
+					break;
+				else
+					continue;
+			}
+		}
 		else
 			continue;
 	}
@@ -282,7 +462,7 @@ void searchBusiness(Note notes[])
 			system("cls");
 			for (int i = 0; i < lastNoteID; i++)
 			{
-				if (notes[i].prioritet == key)
+				if (notes[i].priority == key)
 				{
 					cout << i + 1 << " | ";
 					notes[i].print();
@@ -321,7 +501,7 @@ void searchBusiness(Note notes[])
 					system("cls");
 					cout << "Enter day   : ";
 					int keyD = inputNum();
-					cout << "Enter mounth: ";
+					cout << "Enter month : ";
 					int keyM = inputNum();
 					cout << "Enter year  : ";
 					int keyY = inputNum();
@@ -329,7 +509,7 @@ void searchBusiness(Note notes[])
 					system("cls");
 					for (int i = 0; i < lastNoteID; i++)
 					{
-						if (notes[i].dataExecution.day == keyD && notes[i].dataExecution.mounth == keyM && notes[i].dataExecution.year == keyY)
+						if (notes[i].dateExec.day == keyD && notes[i].dateExec.month == keyM && notes[i].dateExec.year == keyY)
 						{
 							cout << i + 1 << " | ";
 							notes[i].print();
@@ -347,7 +527,7 @@ void searchBusiness(Note notes[])
 					system("cls");
 					for (int i = 0; i < lastNoteID; i++)
 					{
-						if (notes[i].dataExecution.hour == keyH && notes[i].dataExecution.minutes == keyMn)
+						if (notes[i].dateExec.hour == keyH && notes[i].dateExec.minutes == keyMn)
 						{
 							cout << i + 1 << " | ";
 							notes[i].print();
@@ -374,8 +554,8 @@ int main()
 	for (;;)
 	{
 		system("cls");
-		cout << "1. Add business\n2. Remove business\n3. Edit business\n";
-		cout << "4. Search business\n5. Print business list\n0. Exit\n>> ";
+		cout << "1. Add to-do note\n2. Remove to-do note\n3. Edit to-do note\n";
+		cout << "4. Search to-do note\n5. Print to-do list\n0. Exit\n>> ";
 		menuNum = inputNum();
 
 		void (*menu[5])(Note notes[])
@@ -384,7 +564,7 @@ int main()
 			removeBusiness,
 			editBusiness,
 			searchBusiness,
-			printBusiness
+			showBisinesses
 		};
 
 		if (menuNum == 0)

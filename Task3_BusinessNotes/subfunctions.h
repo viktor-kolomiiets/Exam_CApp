@@ -2,3 +2,4 @@
 
 std::string inputString();
 int inputNum();
+int sortType();
