@@ -40,19 +40,24 @@ struct Date
 	void setDate()
 	{
 		cout << "\t\tDay      : ";
-		day = inputNum();
+		day = inputNumRange(1, 31);
 		cout << "\t\tMonth    : ";
-		month = inputNum();
+		month = inputNumRange(1, 12);
 		cout << "\t\tYear     : ";
-		year = inputNum();
+		year = inputNumRange(1, 9999);
 	}
 
 	void setTime()
 	{
 		cout << "\t\tHour     : ";
-		hour = inputNum();
+		hour = inputNumRange(0, 24);
 		cout << "\t\tMinutes  : ";
-		minutes = inputNum();
+		minutes = inputNumRange(0, 59);
+	}
+
+	int getWeek()
+	{
+		return weekNo(year, month, day);
 	}
 
 	//convert date & time to union value
@@ -338,7 +343,9 @@ void showBisinesses(Note notes[])
 							output[j] = notes[i];
 							j++;
 						}
+					//system("cls");
 					int sort = sortType();
+
 					if (sort == 1)
 						sortByPriority(output, outputSize);
 					else
@@ -363,11 +370,66 @@ void showBisinesses(Note notes[])
 		}
 		else if (subMenu == 2)
 		{
+			int sub = 0, year = 0;
 
+			system("cls");
+			for (;;)
+			{
+				int id = -1, week = 0;
+				int outputSize = 0;
+				Note* output;
+
+				cout << "Enter year:\n";
+				year = inputNum();
+				cout << "Enter week No (1 - 55): ";
+				week = inputNumRange(1, 55);
+
+				for (int i = 0; i < lastNoteID; i++)
+					if (notes[i].dateExec.year == year && notes[i].dateExec.getWeek() == week)
+						outputSize++;
+
+				if (id == -1)
+				{
+					cout << "There is no entry for this month\n";
+					//continue;
+				}
+				else
+				{
+					output = new Note[outputSize];
+					int j = 0;
+					for (int i = 0; i < lastNoteID; i++)
+						if (notes[i].dateExec.year == year && notes[i].dateExec.getWeek() == week)
+						{
+							output[j] = notes[i];
+							j++;
+						}
+
+					int sort = sortType();
+					if (sort == 1)
+						sortByPriority(output, outputSize);
+					else
+						sortByDate(output, outputSize);
+					//system("cls");
+					printTable(output, outputSize);
+
+					if (output)
+					{
+						delete[] output;
+						output = nullptr;
+					}
+				}
+
+				cout << "0. Back\n>> ";
+				sub = inputNum();
+				if (sub == 0)
+					break;
+				else
+					continue;
+			}
 		}
 		else if (subMenu == 3)
 		{
-			int sub = 0, month = 0;;
+			int sub = 0, month = 0;
 
 			system("cls");
 			for (;;)
@@ -398,12 +460,13 @@ void showBisinesses(Note notes[])
 							output[j] = notes[i];
 							j++;
 						}
+					
 					int sort = sortType();
 					if (sort == 1)
 						sortByPriority(output, outputSize);
 					else
 						sortByDate(output, outputSize);
-
+					//system("cls");
 					printTable(output, outputSize);
 
 					if (output)
