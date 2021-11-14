@@ -304,7 +304,7 @@ void showBisinesses(Note notes[])
 	{
 		system("cls");
 		cout << "Display to-do list for:\n";
-		cout << "1. Day\n2. Week\n3. Month\n0. Back\n>> ";
+		cout << "1. Day\n2. Week\n3. Month\n4. All list\n0. Back\n>> ";
 		subMenu = inputNum();
 
 		if (subMenu == 0)
@@ -317,7 +317,6 @@ void showBisinesses(Note notes[])
 			system("cls");
 			for (;;)
 			{
-				int id = -1;
 				int outputSize = 0;
 				Note* output;
 				
@@ -328,7 +327,7 @@ void showBisinesses(Note notes[])
 					if (notes[i].dateExec.day == date.day && notes[i].dateExec.month == date.month && notes[i].dateExec.year == date.month)
 						outputSize++;
 
-				if (id == -1)
+				if (outputSize == 0)
 				{
 					cout << "There is no entry for this day\n";
 					//continue;
@@ -375,11 +374,11 @@ void showBisinesses(Note notes[])
 			system("cls");
 			for (;;)
 			{
-				int id = -1, week = 0;
+				int week = 0;
 				int outputSize = 0;
 				Note* output;
 
-				cout << "Enter year:\n";
+				cout << "Enter year: ";
 				year = inputNum();
 				cout << "Enter week No (1 - 55): ";
 				week = inputNumRange(1, 55);
@@ -388,7 +387,7 @@ void showBisinesses(Note notes[])
 					if (notes[i].dateExec.year == year && notes[i].dateExec.getWeek() == week)
 						outputSize++;
 
-				if (id == -1)
+				if (outputSize == 0)
 				{
 					cout << "There is no entry for this month\n";
 					//continue;
@@ -434,18 +433,17 @@ void showBisinesses(Note notes[])
 			system("cls");
 			for (;;)
 			{
-				int id = -1;
 				int outputSize = 0;
 				Note* output;
 
-				cout << "Enter month:\n";
-				month = inputNum();
+				cout << "Enter month: ";
+				month = inputNumRange(1, 12);
 
 				for (int i = 0; i < lastNoteID; i++)
 					if (notes[i].dateExec.month == month)
 						outputSize++;
 
-				if (id == -1)
+				if (outputSize == 0)
 				{
 					cout << "There is no entry for this month\n";
 					//continue;
@@ -484,6 +482,8 @@ void showBisinesses(Note notes[])
 					continue;
 			}
 		}
+		else if (subMenu == 4)
+			printTable(notes, lastNoteID);
 		else
 			continue;
 	}
@@ -619,7 +619,7 @@ int main()
 		system("cls");
 		cout << "1. Add to-do note\n2. Remove to-do note\n3. Edit to-do note\n";
 		cout << "4. Search to-do note\n5. Print to-do list\n0. Exit\n>> ";
-		menuNum = inputNum();
+		menuNum = inputNumRange(0, 5);
 
 		void (*menu[5])(Note notes[])
 		{ 
