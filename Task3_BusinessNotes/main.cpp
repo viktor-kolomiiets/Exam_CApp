@@ -264,7 +264,7 @@ void printLine(Note note, int id)
 	cout.width(4);
 	cout << id << " \t| ";
 	cout << note.name;
-	if (note.name.size() < 8)
+	if (note.name.size() < 6)
 		cout << "\t";
 	cout << "\t| " << note.priority << "\t|  ";
 	note.dateExec.print();
@@ -274,32 +274,23 @@ void printLine(Note note, int id)
 
 void printTable(Note notes[], int size)
 {
-	int sub = 0;
+	system("cls");
+	cout << string(105, '-') << "\n";
+	cout.width(4);
+	cout << "   No\t| " << "Name\t\t| " << "Prior.|  " << "Date & Time Exec.\t| " << "Description" << endl;
+	cout << string(105, '-') << "\n";
 
-	for (;;)
-	{
-		system("cls");
-		cout << string(105, '-') << "\n";
-		cout.width(4);
-		cout << "   No\t| " << "Name\t\t| " << "Prior.|  " << "Date & Time Exec.\t| " << "Description" << endl;
-		cout << string(105, '-') << "\n";
+	for (int i = 0; i < size; i++)
+		printLine(notes[i], i);
 
-		for (int i = 0; i < size; i++)
-			printLine(notes[i], i);
-
-		cout << "0. Back\n>> ";
-
-		sub = inputNum();
-		if (sub == 0)
-			break;
-		else
-			continue;
-	}
+	cout << string(105, '-') << "\n";
 }
 
 void showBisinesses(Note notes[])
 {
 	int subMenu = 0;
+	void(*sortF[2])(Note*, long) { sortByPriority, sortByDate };
+
 	for (;;)
 	{
 		system("cls");
@@ -324,32 +315,25 @@ void showBisinesses(Note notes[])
 				date.setDate();
 
 				for (int i = 0; i < lastNoteID; i++)
-					if (notes[i].dateExec.day == date.day && notes[i].dateExec.month == date.month && notes[i].dateExec.year == date.month)
+					if (notes[i].dateExec.day == date.day && notes[i].dateExec.month == date.month && notes[i].dateExec.year == date.year)
 						outputSize++;
 
 				if (outputSize == 0)
-				{
 					cout << "There is no entry for this day\n";
-					//continue;
-				}
 				else
 				{
 					output = new Note[outputSize];
 					int j = 0;
 					for (int i = 0; i < lastNoteID; i++)
-						if (notes[i].dateExec.day == date.day && notes[i].dateExec.month == date.month && notes[i].dateExec.year == date.month)
+						if (notes[i].dateExec.day == date.day && notes[i].dateExec.month == date.month && notes[i].dateExec.year == date.year)
 						{
 							output[j] = notes[i];
 							j++;
 						}
-					//system("cls");
-					int sort = sortType();
 
-					if (sort == 1)
-						sortByPriority(output, outputSize);
-					else
-						sortByDate(output, outputSize);
-
+					cout << "Sort by:\n1. Priority\n2. Date & Time Exec.\n";
+					int sort = inputNumRange(1, 2);
+					sortF[sort - 1](output, outputSize);
 					printTable(output, outputSize);
 
 					if (output)
@@ -388,10 +372,7 @@ void showBisinesses(Note notes[])
 						outputSize++;
 
 				if (outputSize == 0)
-				{
-					cout << "There is no entry for this month\n";
-					//continue;
-				}
+					cout << "There is no entry for this week\n";
 				else
 				{
 					output = new Note[outputSize];
@@ -403,12 +384,9 @@ void showBisinesses(Note notes[])
 							j++;
 						}
 
-					int sort = sortType();
-					if (sort == 1)
-						sortByPriority(output, outputSize);
-					else
-						sortByDate(output, outputSize);
-					//system("cls");
+					cout << "Sort by:\n1. Priority\n2. Date & Time Exec.\n";
+					int sort = inputNumRange(1, 2);
+					sortF[sort - 1](output, outputSize);
 					printTable(output, outputSize);
 
 					if (output)
@@ -444,10 +422,7 @@ void showBisinesses(Note notes[])
 						outputSize++;
 
 				if (outputSize == 0)
-				{
 					cout << "There is no entry for this month\n";
-					//continue;
-				}
 				else
 				{
 					output = new Note[outputSize];
@@ -459,12 +434,9 @@ void showBisinesses(Note notes[])
 							j++;
 						}
 					
-					int sort = sortType();
-					if (sort == 1)
-						sortByPriority(output, outputSize);
-					else
-						sortByDate(output, outputSize);
-					//system("cls");
+					cout << "Sort by:\n1. Priority\n2. Date & Time Exec.\n";
+					int sort = inputNumRange(1, 2);
+					sortF[sort - 1](output, outputSize);
 					printTable(output, outputSize);
 
 					if (output)
@@ -483,7 +455,23 @@ void showBisinesses(Note notes[])
 			}
 		}
 		else if (subMenu == 4)
-			printTable(notes, lastNoteID);
+		{
+			int sub = 0;
+			for (;;)
+			{
+				cout << "Sort by:\n1. Priority\n2. Date & Time Exec.\n";
+				int sort = inputNumRange(1, 2);
+				sortF[sort - 1](notes, lastNoteID);
+				printTable(notes, lastNoteID);
+
+				cout << "0. Back\n>> ";
+				sub = inputNum();
+				if (sub == 0)
+					break;
+				else
+					continue;
+			}
+		}
 		else
 			continue;
 	}
