@@ -36,12 +36,6 @@ int inputNumRange(int lborder, int rborder)
 	return input;
 }
 
-int sortType()
-{
-	cout << "Sort by:\n1. Priority\n2. Date & Time Exec.\n";
-	return inputNum();
-}
-
 bool isVisokosnyy(int year)
 {
 	return year % 4 == 0 ? true : false;
@@ -71,5 +65,5 @@ int dateToDay(int year, int mounth, int day)
 
 int weekNo(int year, int month, int day)
 {
-	return dateToDay(year, month, day) / 7 + 1;
+	return (dateToDay(year, month, day) / 7) + 1;
 }

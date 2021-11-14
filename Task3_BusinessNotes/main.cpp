@@ -39,19 +39,19 @@ struct Date
 
 	void setDate()
 	{
-		cout << "\t\tDay      : ";
+		cout << "\tDay      : ";
 		day = inputNumRange(1, 31);
-		cout << "\t\tMonth    : ";
+		cout << "\tMonth    : ";
 		month = inputNumRange(1, 12);
-		cout << "\t\tYear     : ";
+		cout << "\tYear     : ";
 		year = inputNumRange(1, 9999);
 	}
 
 	void setTime()
 	{
-		cout << "\t\tHour     : ";
+		cout << "\tHour     : ";
 		hour = inputNumRange(0, 24);
-		cout << "\t\tMinutes  : ";
+		cout << "\tMinutes  : ";
 		minutes = inputNumRange(0, 59);
 	}
 
@@ -281,7 +281,7 @@ void printTable(Note notes[], int size)
 	cout << string(105, '-') << "\n";
 
 	for (int i = 0; i < size; i++)
-		printLine(notes[i], i);
+		printLine(notes[i], i + 1);
 
 	cout << string(105, '-') << "\n";
 }
@@ -331,7 +331,7 @@ void showBisinesses(Note notes[])
 							j++;
 						}
 
-					cout << "Sort by:\n1. Priority\n2. Date & Time Exec.\n";
+					cout << "Sort by:\n1. Priority\n2. Date & Time Exec.\n>> ";
 					int sort = inputNumRange(1, 2);
 					sortF[sort - 1](output, outputSize);
 					printTable(output, outputSize);
@@ -344,11 +344,9 @@ void showBisinesses(Note notes[])
 				}
 
 				cout << "0. Back\n>> ";
-				sub = inputNum();
-				if (sub == 0)
+				sub = inputNum() + 1;
+				if (sub)
 					break;
-				else
-					continue;
 			}
 		}
 		else if (subMenu == 2)
@@ -363,7 +361,7 @@ void showBisinesses(Note notes[])
 				Note* output;
 
 				cout << "Enter year: ";
-				year = inputNum();
+				year = inputNumRange(1, 9999);
 				cout << "Enter week No (1 - 55): ";
 				week = inputNumRange(1, 55);
 
@@ -380,11 +378,12 @@ void showBisinesses(Note notes[])
 					for (int i = 0; i < lastNoteID; i++)
 						if (notes[i].dateExec.year == year && notes[i].dateExec.getWeek() == week)
 						{
+							//cout << notes[i].dateExec.getWeek() << "\n";
 							output[j] = notes[i];
 							j++;
 						}
 
-					cout << "Sort by:\n1. Priority\n2. Date & Time Exec.\n";
+					cout << "Sort by:\n1. Priority\n2. Date & Time Exec.\n>> ";
 					int sort = inputNumRange(1, 2);
 					sortF[sort - 1](output, outputSize);
 					printTable(output, outputSize);
@@ -397,11 +396,9 @@ void showBisinesses(Note notes[])
 				}
 
 				cout << "0. Back\n>> ";
-				sub = inputNum();
-				if (sub == 0)
+				sub = inputNum() + 1;
+				if (sub)
 					break;
-				else
-					continue;
 			}
 		}
 		else if (subMenu == 3)
@@ -434,7 +431,7 @@ void showBisinesses(Note notes[])
 							j++;
 						}
 					
-					cout << "Sort by:\n1. Priority\n2. Date & Time Exec.\n";
+					cout << "Sort by:\n1. Priority\n2. Date & Time Exec.\n>> ";
 					int sort = inputNumRange(1, 2);
 					sortF[sort - 1](output, outputSize);
 					printTable(output, outputSize);
@@ -447,11 +444,9 @@ void showBisinesses(Note notes[])
 				}
 
 				cout << "0. Back\n>> ";
-				sub = inputNum();
-				if (sub == 0)
+				sub = inputNum() + 1;
+				if (sub)
 					break;
-				else
-					continue;
 			}
 		}
 		else if (subMenu == 4)
@@ -459,17 +454,15 @@ void showBisinesses(Note notes[])
 			int sub = 0;
 			for (;;)
 			{
-				cout << "Sort by:\n1. Priority\n2. Date & Time Exec.\n";
+				cout << "Sort by:\n1. Priority\n2. Date & Time Exec.\n>> ";
 				int sort = inputNumRange(1, 2);
 				sortF[sort - 1](notes, lastNoteID);
 				printTable(notes, lastNoteID);
 
 				cout << "0. Back\n>> ";
-				sub = inputNum();
-				if (sub == 0)
+				sub = inputNum() + 1;
+				if (sub)
 					break;
-				else
-					continue;
 			}
 		}
 		else
