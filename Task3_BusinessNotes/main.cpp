@@ -205,67 +205,6 @@ void sortByDate(Note notes[], long size)
 	notes[j - 1] = oldFirstNote;
 }
 
-void addBusiness(Note notes[])
-{
-	system("cls");
-	if (lastNoteID + 1 < 100)
-	{
-		notes[lastNoteID].addNote();
-		lastNoteID += 1;
-	}
-	else
-		cout << "Out of memory\n";
-}
-
-void removeBusiness(Note notes[])
-{
-	system("cls");
-	int id = 0;
-	for (;;)
-	{
-		cout << "Enter business No: ";
-		id = inputNum() - 1;
-		if (id >= 0 && id <= lastNoteID)
-			break;
-		else
-		{
-			cout << "Out of range\n";
-			continue;
-		}
-	}
-
-	system("cls");
-	for (int i = id; i < lastNoteID; i++)
-	{
-		notes[i] = notes[i + 1];
-	}
-	notes[lastNoteID].removeNote();
-	::lastNoteID--;
-}
-
-void editBusiness(Note notes[])
-{
-	system("cls");
-	int id = 0;
-
-	for (;;)
-	{
-		cout << "Enter business No: ";
-		id = inputNum() - 1;
-		if (id >= 0 && id <= lastNoteID)
-			break;
-		else
-		{
-			cout << "Out of range\n";
-			continue;
-		}
-	}
-
-	system("cls");
-	cout << "Enter new data:\n";
-	notes[id].addNote();
-}
-
 void printLine(Note note, int id)
 {
 	cout.width(4);
@@ -291,6 +230,89 @@ void printTable(Note notes[], int size)
 		printLine(notes[i], i + 1);
 
 	cout << string(105, '-') << "\n";
+}
+
+void addBusiness(Note notes[])
+{
+	system("cls");
+	if (lastNoteID + 1 < 100)
+	{
+		notes[lastNoteID].addNote();
+		lastNoteID += 1;
+	}
+	else
+		cout << "Out of memory\n";
+}
+
+void removeBusiness(Note notes[])
+{
+	printTable(notes, lastNoteID);
+	if (lastNoteID > 0)
+	{
+		int id = 0;
+		for (;;)
+		{
+			cout << "Enter business No: ";
+			id = inputNum() - 1;
+			if (id >= 0 && id < lastNoteID)
+				break;
+			else
+			{
+				cout << "Out of range\n";
+				continue;
+			}
+		}
+
+		system("cls");
+		for (int i = id; i < lastNoteID; i++)
+		{
+			notes[i] = notes[i + 1];
+		}
+		notes[lastNoteID].removeNote();
+		::lastNoteID--;
+	}
+	else
+		for (;;)
+		{
+			cout << "0. Back\n>> ";
+			string s = inputString();
+			if (s.size() >= 0)
+				break;
+		}
+}
+
+void editBusiness(Note notes[])
+{
+	printTable(notes, lastNoteID);
+	if (lastNoteID > 0)
+	{
+		int id = 0;
+
+		for (;;)
+		{
+			cout << "Enter business No: ";
+			id = inputNum() - 1;
+			if (id >= 0 && id < lastNoteID)
+				break;
+			else
+			{
+				cout << "Out of range\n";
+				continue;
+			}
+		}
+
+		system("cls");
+		cout << "Enter new data:\n";
+		notes[id].addNote();
+	}
+	else
+		for (;;)
+		{
+			cout << "0. Back\n>> ";
+			string s = inputString();
+			if (s.size() >= 0)
+				break;
+		}
 }
 
 void showBisinesses(Note notes[])
