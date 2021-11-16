@@ -92,7 +92,7 @@ struct Note
 	void addNote()
 	{
 		system("cls");
-		cout << "Enter business\'s name    : ";
+		cout << "Enter note\'s name        : ";
 		name = inputString();
 
 		cout << "Enter note\'s priority    : ";
@@ -295,7 +295,7 @@ void printTable(Note notes[], int size)
 
 void showBisinesses(Note notes[])
 {
-	int subMenu = 0;
+	string subMenu = "";
 	void(*sortF[2])(Note*, long) { sortByPriority, sortByDate };
 
 	for (;;)
@@ -303,11 +303,11 @@ void showBisinesses(Note notes[])
 		system("cls");
 		cout << "Display to-do list for:\n";
 		cout << "1. Day\n2. Week\n3. Month\n4. All list\n0. Back\n>> ";
-		subMenu = inputNum();
+		subMenu = inputString();
 
-		if (subMenu == 0)
+		if (subMenu == "0")
 			break;
-		else if (subMenu == 1)
+		else if (subMenu == "1")
 		{
 			Date date;
 			int sub = 0;
@@ -356,7 +356,7 @@ void showBisinesses(Note notes[])
 					break;
 			}
 		}
-		else if (subMenu == 2)
+		else if (subMenu == "2")
 		{
 			int sub = 0, year = 0;
 
@@ -407,9 +407,9 @@ void showBisinesses(Note notes[])
 					break;
 			}
 		}
-		else if (subMenu == 3)
+		else if (subMenu == "3")
 		{
-			int sub = 0, month = 0;
+			int sub = 0, month = 0, year = 0;
 
 			system("cls");
 			for (;;)
@@ -419,9 +419,11 @@ void showBisinesses(Note notes[])
 
 				cout << "Enter month: ";
 				month = inputNumRange(1, 12);
+				cout << "Enter year: ";
+				year = inputNumRange(1, 9999);
 
 				for (int i = 0; i < lastNoteID; i++)
-					if (notes[i].dateExec.month == month)
+					if (notes[i].dateExec.month == month && notes[i].dateExec.year == year)
 						outputSize++;
 
 				if (outputSize == 0)
@@ -431,7 +433,7 @@ void showBisinesses(Note notes[])
 					output = new Note[outputSize];
 					int j = 0;
 					for (int i = 0; i < lastNoteID; i++)
-						if (notes[i].dateExec.month == month)
+						if (notes[i].dateExec.month == month && notes[i].dateExec.year == year)
 						{
 							output[j] = notes[i];
 							j++;
@@ -455,19 +457,18 @@ void showBisinesses(Note notes[])
 					break;
 			}
 		}
-		else if (subMenu == 4)
+		else if (subMenu == "4")
 		{
-			int sub = 0;
+			cout << "Sort by:\n1. Priority\n2. Date & Time Exec.\n>> ";
+			int sort = inputNumRange(1, 2);
+			sortF[sort - 1](notes, lastNoteID);
+
 			for (;;)
 			{
-				cout << "Sort by:\n1. Priority\n2. Date & Time Exec.\n>> ";
-				int sort = inputNumRange(1, 2);
-				sortF[sort - 1](notes, lastNoteID);
 				printTable(notes, lastNoteID);
-
 				cout << "0. Back\n>> ";
-				sub = inputNum() + 1;
-				if (sub)
+				string s = inputString();
+				if (s == "0")
 					break;
 			}
 		}
@@ -478,10 +479,10 @@ void showBisinesses(Note notes[])
 
 void searchBusiness(Note notes[])
 {
-	system("cls");
 	int subMenu = 0;
 	for (;;)
 	{
+		system("cls");
 		cout << "Search to-do note by:\n1. Name\n2. Priority\n3. Description\n4. Date & Time execution\n0. Back\n>> ";
 		subMenu = inputNum();
 
@@ -493,7 +494,6 @@ void searchBusiness(Note notes[])
 			cout << "Enter searching name: ";
 			string key = inputString();
 
-			system("cls");
 			Note* output;
 			int outputSize = 0;
 			for (int i = 0; i < lastNoteID; i++)
@@ -501,7 +501,7 @@ void searchBusiness(Note notes[])
 					outputSize++;
 			if (outputSize > 0)
 			{
-				int j = 0, sub = 0;
+				int j = 0;
 				output = new Note[outputSize];
 				for (int i = 0; i < lastNoteID; i++)
 					if (notes[i].name == key)
@@ -509,15 +509,17 @@ void searchBusiness(Note notes[])
 						output[j] = notes[i];
 						j++;
 					}
-				printTable(output, outputSize);
 				for (;;)
 				{
+					printTable(output, outputSize);
 					cout << "0. Back\n>> ";
-					sub = inputNum() + 1;
-					if (sub)
+					string s = inputString();
+					if (s == "0")
 						break;
 				}
 			}
+			else
+				noSearches();
 		}
 		else if (subMenu == 2)
 		{
@@ -525,7 +527,6 @@ void searchBusiness(Note notes[])
 			cout << "Enter business priority: ";
 			int key = inputNum();
 
-			system("cls");
 			Note* output;
 			int outputSize = 0;
 			for (int i = 0; i < lastNoteID; i++)
@@ -533,7 +534,7 @@ void searchBusiness(Note notes[])
 					outputSize++;
 			if (outputSize > 0)
 			{
-				int j = 0, sub = 0;
+				int j = 0;
 				output = new Note[outputSize];
 				for (int i = 0; i < lastNoteID; i++)
 					if (notes[i].priority == key)
@@ -541,15 +542,17 @@ void searchBusiness(Note notes[])
 						output[j] = notes[i];
 						j++;
 					}
-				printTable(output, outputSize);
 				for (;;)
 				{
+					printTable(output, outputSize);
 					cout << "0. Back\n>> ";
-					sub = inputNum() + 1;
-					if (sub)
+					string s = inputString();
+					if (s == "0")
 						break;
 				}
 			}
+			else
+				noSearches();
 		}
 		else if (subMenu == 3)
 		{
@@ -557,7 +560,6 @@ void searchBusiness(Note notes[])
 			cout << "Enter key word: ";
 			string key = inputString();
 
-			system("cls");
 			Note* output;
 			int outputSize = 0;
 			for (int i = 0; i < lastNoteID; i++)
@@ -565,7 +567,7 @@ void searchBusiness(Note notes[])
 					outputSize++;
 			if (outputSize > 0)
 			{
-				int j = 0, sub = 0;
+				int j = 0;
 				output = new Note[outputSize];
 				for (int i = 0; i < lastNoteID; i++)
 					if (notes[i].description.find(key) != string::npos)
@@ -573,15 +575,17 @@ void searchBusiness(Note notes[])
 						output[j] = notes[i];
 						j++;
 					}
-				printTable(output, outputSize);
 				for (;;)
 				{
+					printTable(output, outputSize);
 					cout << "0. Back\n>> ";
-					sub = inputNum() + 1;
-					if (sub)
+					string s = inputString();
+					if (s == "0")
 						break;
 				}
 			}
+			else
+				noSearches();
 		}
 		else if (subMenu == 4)
 		{
@@ -594,7 +598,6 @@ void searchBusiness(Note notes[])
 				date.setDate();
 				date.setTime();
 
-				system("cls");
 				Note* output;
 				int outputSize = 0;
 				for (int i = 0; i < lastNoteID; i++)
@@ -602,7 +605,7 @@ void searchBusiness(Note notes[])
 						outputSize++;
 				if (outputSize > 0)
 				{
-					int j = 0, sub = 0;
+					int j = 0;
 					output = new Note[outputSize];
 					for (int i = 0; i < lastNoteID; i++)
 						if (compareDates(notes[i].dateExec, date))
@@ -610,15 +613,17 @@ void searchBusiness(Note notes[])
 							output[j] = notes[i];
 							j++;
 						}
-					printTable(output, outputSize);
 					for (;;)
 					{
+						printTable(output, outputSize);
 						cout << "0. Back\n>> ";
-						sub = inputNum() + 1;
-						if (sub)
+						string s = inputString();
+						if (s == "0")
 							break;
 					}
 				}
+				else
+					noSearches();
 			}
 		}
 		else

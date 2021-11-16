@@ -357,7 +357,7 @@ int main()
 					for (;;)
 					{
 						Update();
-						cout << "0. Quit\n>> ";
+						cout << "0. Quit (other number to continue)\n>> ";
 						cin >> confirm;
 						if (confirm == '0')
 						{
