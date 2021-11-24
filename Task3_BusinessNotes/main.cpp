@@ -611,42 +611,38 @@ void searchBusiness(Note notes[])
 		}
 		else if (subMenu == 4)
 		{
-			int sub = 0;
-			for (;;)
-			{
-				system("cls");
-				Date date;
-				cout << "Enter date & time:\n";
-				date.setDate();
-				date.setTime();
+			system("cls");
+			Date date;
+			cout << "Enter date & time:\n";
+			date.setDate();
+			date.setTime();
 
-				Note* output;
-				int outputSize = 0;
+			Note* output;
+			int outputSize = 0;
+			for (int i = 0; i < lastNoteID; i++)
+				if (compareDates(notes[i].dateExec, date))
+					outputSize++;
+			if (outputSize > 0)
+			{
+				int j = 0;
+				output = new Note[outputSize];
 				for (int i = 0; i < lastNoteID; i++)
 					if (compareDates(notes[i].dateExec, date))
-						outputSize++;
-				if (outputSize > 0)
-				{
-					int j = 0;
-					output = new Note[outputSize];
-					for (int i = 0; i < lastNoteID; i++)
-						if (compareDates(notes[i].dateExec, date))
-						{
-							output[j] = notes[i];
-							j++;
-						}
-					for (;;)
 					{
-						printTable(output, outputSize);
-						cout << "0. Back\n>> ";
-						string s = inputString();
-						if (s == "0")
-							break;
+						output[j] = notes[i];
+						j++;
 					}
+				for (;;)
+				{
+					printTable(output, outputSize);
+					cout << "0. Back\n>> ";
+					string s = inputString();
+					if (s == "0")
+						break;
 				}
-				else
-					noSearches();
 			}
+			else
+				noSearches();
 		}
 		else
 			continue;
