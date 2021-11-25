@@ -22,6 +22,7 @@ int inputNum()
 	return stoi(input);
 }
 
+//scan user's input in range [lborder; rborder] from console
 int inputNumRange(int lborder, int rborder)
 {
 	int input = 0;

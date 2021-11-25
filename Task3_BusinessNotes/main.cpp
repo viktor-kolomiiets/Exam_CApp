@@ -91,7 +91,7 @@ struct Note
 
 	void addNote()
 	{
-		system("cls");
+		//system("cls");
 		cout << "Enter note\'s name        : ";
 		name = inputString();
 
@@ -283,36 +283,30 @@ void removeBusiness(Note notes[])
 
 void editBusiness(Note notes[])
 {
-	printTable(notes, lastNoteID);
-	if (lastNoteID > 0)
+	for (;;)
 	{
-		int id = 0;
+		printTable(notes, lastNoteID);
 
-		for (;;)
+		if (lastNoteID > 0)
 		{
-			cout << "Enter business No: ";
-			id = inputNum() - 1;
-			if (id >= 0 && id < lastNoteID)
+			int id = 0;
+			cout << "Enter business No (0. Back): ";
+			id = inputNumRange(0, lastNoteID);
+
+			if (id == 0)
 				break;
 			else
 			{
-				cout << "Out of range\n";
+				cout << "Enter new data\n";
+				notes[id - 1].addNote();
 				continue;
 			}
 		}
-
-		system("cls");
-		cout << "Enter new data:\n";
-		notes[id].addNote();
+		cout << "0. Back\n>> ";
+		string s = inputString();
+		if (s.size() >= 0)
+			break;
 	}
-	else
-		for (;;)
-		{
-			cout << "0. Back\n>> ";
-			string s = inputString();
-			if (s.size() >= 0)
-				break;
-		}
 }
 
 void showBisinesses(Note notes[])
