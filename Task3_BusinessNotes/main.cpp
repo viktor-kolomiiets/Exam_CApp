@@ -360,8 +360,8 @@ void showBisinesses(Note notes[])
 				}
 
 				cout << "0. Back\n>> ";
-				sub = inputNum() + 1;
-				if (sub)
+				string s = inputString();
+				if (s.size() >= 0)
 					break;
 			}
 		}
@@ -411,8 +411,8 @@ void showBisinesses(Note notes[])
 				}
 
 				cout << "0. Back\n>> ";
-				sub = inputNum() + 1;
-				if (sub)
+				string s = inputString();
+				if (s.size() >= 0)
 					break;
 			}
 		}
@@ -461,8 +461,8 @@ void showBisinesses(Note notes[])
 				}
 
 				cout << "0. Back\n>> ";
-				sub = inputNum() + 1;
-				if (sub)
+				string s = inputString();
+				if (s.size() >= 0)
 					break;
 			}
 		}

@@ -71,13 +71,10 @@ int weekNo(int year, int month, int day)
 
 void noSearches()
 {
-	for (;;)
-	{
-		cout << "To-Do note was not found\n";
-		cout << "0. Back\n>> ";
-		string s = inputString();
-		if (s.size() >= 0)
-			break;
-	}
+	cout << "To-Do note was not found\n";
+	cout << "0. Back\n>> ";
+	string s = inputString();
+	if (s.size() >= 0)
+		return;
 	return;
 }
