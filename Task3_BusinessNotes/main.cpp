@@ -246,39 +246,32 @@ void addBusiness(Note notes[])
 
 void removeBusiness(Note notes[])
 {
-	printTable(notes, lastNoteID);
-	if (lastNoteID > 0)
+	for (;;)
 	{
-		int id = 0;
-		for (;;)
+		printTable(notes, lastNoteID);
+		if (lastNoteID > 0)
 		{
-			cout << "Enter business No: ";
-			id = inputNum() - 1;
-			if (id >= 0 && id < lastNoteID)
+			int id = 0;
+			cout << "Enter business No (0. Back): ";
+			id = inputNumRange(0, lastNoteID);
+			if (id == 0)
 				break;
 			else
 			{
-				cout << "Out of range\n";
+				for (int i = id; i < lastNoteID; i++)
+				{
+					notes[i - 1] = notes[i];
+				}
+				notes[lastNoteID].removeNote();
+				::lastNoteID--;
 				continue;
 			}
 		}
-
-		system("cls");
-		for (int i = id; i < lastNoteID; i++)
-		{
-			notes[i] = notes[i + 1];
-		}
-		notes[lastNoteID].removeNote();
-		::lastNoteID--;
+		cout << "0. Back\n>> ";
+		string s = inputString();
+		if (s.size() >= 0)
+			break;
 	}
-	else
-		for (;;)
-		{
-			cout << "0. Back\n>> ";
-			string s = inputString();
-			if (s.size() >= 0)
-				break;
-		}
 }
 
 void editBusiness(Note notes[])
